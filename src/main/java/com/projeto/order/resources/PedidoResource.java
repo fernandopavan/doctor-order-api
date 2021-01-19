@@ -45,7 +45,7 @@ public class PedidoResource {
     @Transactional
     @PostMapping
     public ResponseEntity<Pedido> insert(@Valid @RequestBody Pedido pedido) {
-        return ResponseEntity.ok().body(repository.save(pedido));
+        return ResponseEntity.ok().body(service.save(pedido));
     }
 
     @ApiOperation("Atualiza um pedido")

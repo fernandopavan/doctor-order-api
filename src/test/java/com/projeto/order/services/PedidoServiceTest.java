@@ -1,134 +1,105 @@
-//package com.projeto.order.services;
-//
-//import com.google.common.collect.ImmutableSet;
-//import com.projeto.order.domain.Pedido;
-//import com.projeto.order.domain.PedidoProduto;
-//import com.projeto.order.repositories.PedidoRepository;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//
-//import java.math.BigDecimal;
-//import java.time.LocalDateTime;
-//import java.util.Collections;
-//import java.util.Optional;
-//import java.util.Set;
-//import java.util.UUID;
-//
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.ArgumentMatchers.anyCollection;
-//import static org.mockito.Mockito.mock;
-//import static org.mockito.Mockito.when;
-//
-//@SpringBootTest
-//public class PedidoServiceTest {
-//
-//    @Autowired
-//    private PedidoService service;
-//
-//    @MockBean
-//    private PedidoRepository repository;
-//
-//    @MockBean
-//    private ProdutoService produtoService;
-//
-//    @MockBean
-//    private PedidoProdutoRepository pedidoProdutoRepository;
-//
-//    @Test
-//    void deveInserirPedidoComProdutosEServicos() {
-//        Produto produto = getMockProduto();
-//        PedidoProduto pedidoProduto = PedidoProduto.Builder.create()
-//                .quantidade(2)
-//                .produto(produto)
-//                .build();
-//
-//        Produto servico = getMockServico();
-//        PedidoProduto pedidoServico = PedidoProduto.Builder.create()
-//                .quantidade(1)
-//                .produto(servico)
-//                .build();
-//
-//        Set<PedidoProduto> pedidoProdutos = ImmutableSet.of(pedidoProduto, pedidoServico);
-//
-//        Pedido pedido = createPedido(pedidoProdutos);
-//
-//        when(repository.save(any(Pedido.class))).thenReturn(pedido);
-//        when(produtoService.find(any())).thenReturn(produto, servico);
-//        when(pedidoProdutoRepository.saveAll(anyCollection())).thenReturn(pedidoProdutos);
-//
-//        Pedido save = service.insert(pedido);
-//
-//        Assertions.assertEquals("Pedido 1", save.getDescricao());
-//        Assertions.assertFalse(save.getFechado());
-//        Assertions.assertEquals(LocalDateTime.of(2020, 1, 1, 1, 1), save.getDataHora());
-//        Assertions.assertEquals(BigDecimal.TEN, save.getDesconto());
-//        Assertions.assertEquals(BigDecimal.valueOf(19.0).setScale(1), save.getValorTotal());
-//        Assertions.assertEquals(2, save.getPedidoProdutos().size());
-//    }
-//
-//    @Test
-//    void deveAtualizarPedidoComProdutosEServicos() {
-//        Produto servico = getMockServico();
-//        PedidoProduto pedidoServico = PedidoProduto.Builder.create()
-//                .quantidade(1)
-//                .produto(servico)
-//                .build();
-//
-//        Produto produto = getMockProduto();
-//        PedidoProduto pedidoProduto = PedidoProduto.Builder.create()
-//                .quantidade(3)
-//                .produto(produto)
-//                .build();
-//
-//        Set<PedidoProduto> pedidoProdutos = ImmutableSet.of(pedidoProduto, pedidoServico);
-//        Pedido pedidoUpdated = createPedido(pedidoProdutos);
-//
-//        when(repository.findById(any())).thenReturn(Optional.of(createPedido(Collections.EMPTY_SET)));
-//        when(produtoService.find(any())).thenReturn(produto, servico);
-//        when(repository.save(any(Pedido.class))).thenReturn(pedidoUpdated);
-//
-//        Pedido save = service.update(pedidoUpdated, UUID.randomUUID());
-//
-//        Assertions.assertEquals("Pedido 1", save.getDescricao());
-//        Assertions.assertFalse(save.getFechado());
-//        Assertions.assertEquals(LocalDateTime.of(2020, 1, 1, 1, 1), save.getDataHora());
-//        Assertions.assertEquals(BigDecimal.TEN, save.getDesconto());
-//        Assertions.assertEquals(BigDecimal.valueOf(28.0).setScale(1), save.getValorTotal());
-//        Assertions.assertEquals(2, save.getPedidoProdutos().size());
-//    }
-//
-//    private Pedido createPedido(Set<PedidoProduto> pedidoProdutos) {
-//        return Pedido.Builder.create()
-//                .descricao("Pedido 1")
-//                .fechado(Boolean.FALSE)
-//                .dataHora(LocalDateTime.of(2020, 1, 1, 1, 1))
-//                .desconto(BigDecimal.TEN)
-//                .pedidoProdutos(pedidoProdutos)
-//                .valorTotal(pedidoProdutos)
-//                .build();
-//    }
-//
-//    private Produto getMockServico() {
-//        Produto servico = mock(Produto.class);
-//        when(servico.getId()).thenReturn(UUID.randomUUID());
-//        when(servico.getDescricao()).thenReturn("Servico 1");
-//        when(servico.getServico()).thenReturn(Boolean.TRUE);
-//        when(servico.getInativo()).thenReturn(Boolean.FALSE);
-//        when(servico.getPreco()).thenReturn(BigDecimal.ONE);
-//        return servico;
-//    }
-//
-//    private Produto getMockProduto() {
-//        Produto produto = mock(Produto.class);
-//        when(produto.getId()).thenReturn(UUID.randomUUID());
-//        when(produto.getDescricao()).thenReturn("Produto 1");
-//        when(produto.getServico()).thenReturn(Boolean.FALSE);
-//        when(produto.getInativo()).thenReturn(Boolean.FALSE);
-//        when(produto.getPreco()).thenReturn(BigDecimal.TEN);
-//        return produto;
-//    }
-//
-//}
+package com.projeto.order.services;
+
+import com.projeto.order.domain.Medico;
+import com.projeto.order.domain.Pedido;
+import com.projeto.order.domain.PessoaFisica;
+import com.projeto.order.domain.enums.Sexo;
+import com.projeto.order.repositories.PedidoRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@SpringBootTest
+public class PedidoServiceTest {
+
+    @Autowired
+    private PedidoService service;
+
+    @MockBean
+    private PedidoRepository repository;
+
+    @MockBean
+    private PessoaFisicaService pessoaFisicaService;
+
+    @Test
+    void deveInserirPedidoComProdutosEServicos() {
+        PessoaFisica pessoaFisica = PessoaFisica.Builder.create()
+                .nome("Gustavo Alves")
+                .nomeMae("Andreia Alves")
+                .dataNascimento(LocalDate.of(2012, 1, 2))
+                .sexo(Sexo.FEM)
+                .telefone("21 1234-1234")
+                .email("gustavo@teste.com")
+                .cpf("445.412.420-52")
+                .rg("46.986.898-3")
+                .endereco("Rua Joaquim Nabuco")
+                .build();
+
+        Medico medico = mock(Medico.class);
+        when(medico.getNome()).thenReturn("Medico Alberto");
+
+        Pedido pedido = createPedido(pessoaFisica, medico);
+
+        when(repository.save(any(Pedido.class))).thenReturn(pedido);
+        when(pessoaFisicaService.find(any())).thenReturn(pessoaFisica);
+
+        Pedido save = repository.save(pedido);
+
+        Assertions.assertEquals("Exame de sangue", save.getExames());
+        Assertions.assertEquals(LocalDate.of(2022, 1, 2), save.getDataValidade());
+        Assertions.assertEquals("Gustavo Alves", save.getPessoaFisica().getNome());
+        Assertions.assertEquals("445.412.420-52", save.getPessoaFisica().getCpf());
+        Assertions.assertEquals("Medico Alberto", save.getMedico().getNome());
+    }
+
+    @Test
+    void deveAtualizarPedidoComProdutosEServicos() {
+        PessoaFisica pessoaFisica = PessoaFisica.Builder.create()
+                .nome("Gustavo Alves")
+                .nomeMae("Andreia Alves")
+                .dataNascimento(LocalDate.of(2012, 1, 2))
+                .sexo(Sexo.FEM)
+                .telefone("21 1234-1234")
+                .email("gustavo@teste.com")
+                .cpf("445.412.420-52")
+                .rg("46.986.898-3")
+                .endereco("Rua Joaquim Nabuco")
+                .build();
+
+        Medico medico = mock(Medico.class);
+        when(medico.getNome()).thenReturn("Medico Alberto");
+
+        Pedido pedidoUpdated = createPedido(pessoaFisica, medico);
+
+        when(repository.findById(any())).thenReturn(java.util.Optional.ofNullable(createPedido(pessoaFisica, medico)));
+        when(pessoaFisicaService.find(any())).thenReturn(pessoaFisica);
+        when(repository.save(any(Pedido.class))).thenReturn(pedidoUpdated);
+
+        Pedido save = service.update(pedidoUpdated, UUID.randomUUID());
+
+        Assertions.assertEquals("Exame de sangue", save.getExames());
+        Assertions.assertEquals(LocalDate.of(2022, 1, 2), save.getDataValidade());
+        Assertions.assertEquals("Gustavo Alves", save.getPessoaFisica().getNome());
+        Assertions.assertEquals("445.412.420-52", save.getPessoaFisica().getCpf());
+        Assertions.assertEquals("Medico Alberto", save.getMedico().getNome());
+    }
+
+    private Pedido createPedido(PessoaFisica pessoa, Medico medico) {
+        return Pedido.Builder.create()
+                .medico(medico)
+                .pessoaFisica(pessoa)
+                .dataValidade(LocalDate.of(2022, 1, 2))
+                .exames("Exame de sangue")
+                .build();
+    }
+
+}

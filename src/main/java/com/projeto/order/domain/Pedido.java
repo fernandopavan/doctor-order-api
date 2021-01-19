@@ -20,6 +20,10 @@ public class Pedido extends AbstractEntity {
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     private UUID id;
 
+    @ManyToOne
+    @JoinColumn(name = "medico_id", referencedColumnName = "id")
+    private Medico medico;
+
     @NotNull(message = "Preenchimento da pessoa é obrigatório")
     @ManyToOne
     @JoinColumn(name = "pessoa_id", referencedColumnName = "id", nullable = false)
@@ -35,6 +39,10 @@ public class Pedido extends AbstractEntity {
     @Override
     public UUID getId() {
         return id;
+    }
+
+    public Medico getMedico() {
+        return medico;
     }
 
     public PessoaFisica getPessoaFisica() {
@@ -61,6 +69,11 @@ public class Pedido extends AbstractEntity {
 
         public static Builder from(Pedido entity) {
             return new Builder(entity, State.BUILT);
+        }
+
+        public Builder medico(Medico medico) {
+            entity.medico = medico;
+            return this;
         }
 
         public Builder pessoaFisica(PessoaFisica pessoaFisica) {

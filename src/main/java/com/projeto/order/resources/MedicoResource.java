@@ -3,9 +3,7 @@ package com.projeto.order.resources;
 import com.projeto.order.domain.Medico;
 import com.projeto.order.domain.QMedico;
 import com.projeto.order.repositories.MedicoRepository;
-import com.projeto.order.repositories.PessoaFisicaRepository;
 import com.projeto.order.services.MedicoService;
-import com.projeto.order.services.PessoaFisicaService;
 import com.projeto.order.services.exceptions.DataIntegrityException;
 import com.querydsl.core.BooleanBuilder;
 import io.swagger.annotations.ApiOperation;
@@ -65,7 +63,8 @@ public class MedicoResource {
     @Transactional
     @PostMapping
     public ResponseEntity<Medico> insert(@Valid @RequestBody Medico medico) {
-        return ResponseEntity.ok().body(repository.save(medico));
+        Medico build = Medico.Builder.from(medico).senha(medico.getSenha()).build();
+        return ResponseEntity.ok().body(repository.save(build));
     }
 
     @ApiOperation("Atualiza uma médico")

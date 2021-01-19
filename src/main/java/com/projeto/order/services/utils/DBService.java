@@ -41,7 +41,7 @@ public class DBService {
                 .perfis(Collections.singleton(Perfil.ADMIN))
                 .build();
 
-        repository.save(medico);
+        Medico medicoSaved = repository.save(medico);
 
         PessoaFisica pessoaFisica = PessoaFisica.Builder.create()
                 .nome("Gustavo Alves")
@@ -55,10 +55,11 @@ public class DBService {
                 .endereco("Rua Joaquim Nabuco")
                 .build();
 
-        PessoaFisica save = pessoaFisicaRepository.save(pessoaFisica);
+        PessoaFisica pessoaFisicaSaved = pessoaFisicaRepository.save(pessoaFisica);
 
         Pedido pedido = Pedido.Builder.create()
-                .pessoaFisica(save)
+                .medico(medicoSaved)
+                .pessoaFisica(pessoaFisicaSaved)
                 .dataValidade(LocalDate.of(2020, 4,12))
                 .exames("Exame de sangue completo")
                 .build();
